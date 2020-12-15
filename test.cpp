@@ -6,7 +6,7 @@
 using namespace std;
 using namespace cv;
 
-static std::string prefix = "/home/meiqua/shape_based_matching/test/";
+static std::string prefix = "C:/Projects/git/shape_based_matching/test/";
 
 class Timer
 {
@@ -15,7 +15,8 @@ public:
     void reset() { beg_ = clock_::now(); }
     double elapsed() const {
         return std::chrono::duration_cast<second_>
-            (clock_::now() - beg_).count(); }
+            (clock_::now() - beg_).count();
+    }
     void out(std::string message = ""){
         double t = elapsed();
         std::cout << message << "\nelasped time:" << t << "s" << std::endl;
@@ -48,7 +49,7 @@ inline void GetMaxScoreIndex(const std::vector<float>& scores, const float thres
     {
         if (scores[i] > threshold)
         {
-            score_index_vec.push_back(std::make_pair(scores[i], i));
+                score_index_vec.push_back(std::make_pair(scores[i], (int)i));
         }
     }
     std::stable_sort(score_index_vec.begin(), score_index_vec.end(),
@@ -161,7 +162,8 @@ void scale_test(string mode = "test"){
         shapes.save_infos(infos_have_templ, prefix + "case0/circle_info.yaml");
         std::cout << "train end" << std::endl << std::endl;
 
-    }else if(mode=="test"){
+    }
+    else if (mode == "test") {
         std::vector<std::string> ids;
 
         // read templates
@@ -267,7 +269,8 @@ void angle_test(string mode = "test", bool use_rot = true){
                 first_angle = info.angle;
 
                 if(use_rot) is_first = false;
-            }else{
+            }
+            else {
                 templ_id = detector.addTemplate_rotate(class_id, first_id,
                                                        info.angle-first_angle,
                                                 {shapes.src.cols/2.0f, shapes.src.rows/2.0f});
@@ -291,7 +294,8 @@ void angle_test(string mode = "test", bool use_rot = true){
         detector.writeClasses(prefix+"case1/%s_templ.yaml");
         shapes.save_infos(infos_have_templ, prefix + "case1/test_info.yaml");
         std::cout << "train end" << std::endl << std::endl;
-    }else if(mode=="test"){
+    }
+    else if (mode == "test") {
         std::vector<std::string> ids;
         ids.push_back("test");
         detector.readClasses(ids, prefix+"case1/%s_templ.yaml");
@@ -322,7 +326,7 @@ void angle_test(string mode = "test", bool use_rot = true){
         auto matches = detector.match(img, 90, ids);
         timer.out();
 
-        if(img.channels() == 1) cvtColor(img, img, CV_GRAY2BGR);
+        if (img.channels() == 1) cvtColor(img, img, cv::COLOR_GRAY2BGR);
 
         std::cout << "matches.size(): " << matches.size() << std::endl;
         size_t top5 = 1;
@@ -407,7 +411,8 @@ void noise_test(string mode = "test"){
         detector.writeClasses(prefix+"case2/%s_templ.yaml");
         shapes.save_infos(infos_have_templ, prefix + "case2/test_info.yaml");
         std::cout << "train end" << std::endl << std::endl;
-    }else if(mode=="test"){
+    }
+    else if (mode == "test") {
         std::vector<std::string> ids;
         ids.push_back("test");
         detector.readClasses(ids, prefix+"case2/%s_templ.yaml");

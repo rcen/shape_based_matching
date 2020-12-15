@@ -12,7 +12,8 @@ public:
     void reset() { beg_ = clock_::now(); }
     double elapsed() const {
         return std::chrono::duration_cast<second_>
-            (clock_::now() - beg_).count(); }
+            (clock_::now() - beg_).count();
+    }
     void out(std::string message = ""){
         double t = elapsed();
         std::cout << message << "\nelasped time:" << t << "s\n" << std::endl;
@@ -182,7 +183,8 @@ bool ColorGradientPyramid::selectScatteredFeatures(const std::vector<Candidate> 
                     distance += 1.0f;
                     distance_sq = distance * distance;
                     continue;
-                }else{
+                    }
+                    else {
                     first_select = false;
                 }
             }
@@ -301,7 +303,8 @@ static void quantizedOrientations(const Mat &src, Mat &magnitude,
         hysteresisGradient(magnitude, angle, sobel_ag, threshold * threshold);
         angle_ori = sobel_ag;
 
-    }else{
+        }
+        else {
 
         magnitude.create(src.size(), CV_32F);
 
@@ -874,7 +877,8 @@ static void similarityLocal(const std::vector<Mat> &linear_memories, const Templ
 
                     dst_ptr += mipp::N<int16_t>();
                 }
-            }else{ // 256 128 or no SIMD
+                }
+                else { // 256 128 or no SIMD
                 for (int row = 0; row < 16; ++row){
                     for(int col=0; col<16; col+=mipp::N<int16_t>()){
                         mipp::Reg<uint8_t> src8_v((uint8_t*)lm_ptr + col);
@@ -1004,7 +1008,8 @@ static void similarityLocal_64(const std::vector<Mat> &linear_memories, const Te
 
                     dst_ptr += mipp::N<uint8_t>();
                 }
-            }else{ // 128 or no SIMD
+                }
+                else { // 128 or no SIMD
                 for (int row = 0; row < 16; ++row){
                     for(int col=0; col<16; col+=mipp::N<uint8_t>()){
                         mipp::Reg<uint8_t> src_v((uint8_t*)lm_ptr + col);
@@ -1160,9 +1165,11 @@ void Detector::matchClass(const LinearMemoryPyramid &lm_pyramid,
                 if (templ.features.size() < 64){
                     similarity_64(lowest_lm[0], templ, similarities, sizes.back(), lowest_T);
                     similarities.convertTo(similarities, CV_16U);
-                }else if (templ.features.size() < 8192){
+                    }
+                    else if (templ.features.size() < 8192) {
                     similarity(lowest_lm[0], templ, similarities, sizes.back(), lowest_T);
-                }else{
+                    }
+                    else {
                     CV_Error(Error::StsBadArg, "feature size too large");
                 }
             }
@@ -1225,9 +1232,11 @@ void Detector::matchClass(const LinearMemoryPyramid &lm_pyramid,
                     if (templ.features.size() < 64){
                         similarityLocal_64(lms[0], templ, similarities2, size, T, Point(x, y));
                         similarities2.convertTo(similarities2, CV_16U);
-                    }else if (templ.features.size() < 8192){
+                        }
+                        else if (templ.features.size() < 8192) {
                         similarityLocal(lms[0], templ, similarities2, size, T, Point(x, y));
-                    }else{
+                        }
+                        else {
                         CV_Error(Error::StsBadArg, "feature size too large");
                     }
                 }
